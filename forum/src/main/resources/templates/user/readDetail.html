@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/img/ourIcon.ico" type="image/x-icon" />
+    <title >SHUE | 让考试更简单</title>
+    <link rel="stylesheet" th:href="@{/media/css/bootstrap.css}">
+
+</head>
+<style>
+    .click{
+        height: 21px;
+        line-height: 21px;
+        padding: 0 11px;
+        background: #02bafa;
+        border: 1px #26bbdb solid;
+        border-radius: 3px;
+        /*color: #fff;*/
+        display: inline-block;
+        text-decoration: none;
+        font-size: 15px;
+        outline: none;
+    }
+    .zsyitem-topic{
+        background-color: white;
+        border-radius:15px;
+        padding: 10px 40px;
+        margin: 20px;
+        box-shadow: 5px 5px 5px #888888;
+    }
+    .zsyitem-re{
+        background-color: white;
+        border-radius:15px;
+        padding: 10px 40px;
+        margin: 20px;
+        box-shadow: 5px 5px 5px #888888;
+    }
+</style>
+<script th:src="@{/jquery/jquery.min.js}"></script>
+<script th:src="@{/jquery/jquery.readingbar.js}"></script>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" style="padding-top:80px ">
+            <div class="panel panel-default zsyitem-topic">
+                <div class="panel-heading">
+                    <h2 id="topicTitle">第一篇文章</h2>
+                    <div id="topsar" style="text-align: right;color: #acb3c3">
+                        <span id="time">2019年1月30日</span> &nbsp;
+                        <a  id="writer" style="color:rebeccapurple;" href="#" class="click" >untilyou</a> &nbsp;
+                        <span id="topicViews">浏览次数: 30</span> &nbsp;
+                        &nbsp;&nbsp;
+                        <a href="#" onclick="goGreen()" class="click" target="_blank">进入护眼模式</a> &nbsp;
+                        &nbsp; &nbsp;
+                        <a href="#" class="click"  onclick="amend()" th:if="${session.USER_CONTEXT!=null&&session.USER_CONTEXT.getUserId()==topic.getUserId()}"> 编辑</a>
+                        <!--<a id="amend" th:if="${session.USER_CONTEXT!=null&&session.USER_CONTEXT.getUserId()==topic.getUserId()}">编辑</a>-->
+                    </div>
+                    <div style="text-align: right;color: #acb3c3">
+                        <span id="belong"> </span>
+                        <span id="label" style="padding-left: 20px"> </span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <article id="mainArticle">
+
+                    </article>
+                    <hr>
+                </div>
+            </div>
+            <div class="panel panel-default zsyitem-topic">
+                <div class="panel-body">
+                    <div>
+                        <h3>用户评论</h3>
+                        <hr>
+                        <ul>
+                            <li th:each="post : ${posts}">
+                                <div>
+                                    <span th:text="${post.getUserName()}" class="click" style="font-size: 18px">用户名</span>
+                                    <span th:text="${post.getCreateTime()}" style="font-size: 9px;color: #0fb391;text-align: right;">回复时间</span>
+                                    <br>
+                                </div>
+                                <!--<h4 th:text="${post.getPostTitle()}"></h4>-->
+                                <article th:text="${post.getPostText()}"></article>
+                                <hr>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<input type="hidden" id="getTitle" th:value="${topic.getTopicTitle()}">
+<input type="hidden" id="getContent" th:value="${topic.getContent()}">
+<input type="hidden" id="getTime" th:value="${topic.getCreateTime()}">
+<input type="hidden" id="getWriter" th:value="${user.getUserName()}">
+<input type="hidden" id="getTopicViews" th:value="${topic.getTopicViews()}">
+<input type="hidden" id="getTopicId" th:value="${topic.getTopicId()}">
+<input type="hidden" id="getBoardName" th:value="${board.getBoardName()}">
+<input type="hidden" id="getLabel" th:value="${topic.getLabel()}">
+</div>
+
+<script>
+    $(function () {
+        $("#time").html($("#getTime"+"    ").val());
+        $("#writer").html($("#getWriter"+"  ").val());
+        $("#topicViews").html("浏览次数  "+$("#getTopicViews").val());
+        $("#topicTitle").html($("#getTitle").val());
+        $("#mainArticle").append($("#getContent").val());
+        $("#label").html("文章分类:  "+$("#getLabel").val());
+        $("#belong").html("所属版块:  "+$("#getBoardName").val());
+    });
+    function goGreen() {
+        var url = "/userRead/"+$("#getTopicId").val();
+        window.location.href = url;
+    }
+    function goUserIndex() {
+        var  url ="/userIndex/"+[[${user.getUserId()}]]+"/0";
+        window.location.href=url;
+    }
+    function amend() {
+        var url = "/userAmend/"+$("#getTopicId").val();
+        window.location.href=url;
+    }
+</script>
+</body>
+</html>

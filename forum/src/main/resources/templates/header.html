@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="topnavbar-wrapper" th:fragment="header">
+    <nav class="navbar topnavbar" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/index">
+                <div class="brand-logo">
+                    <img class="img-responsive" alt="App Logo" th:src="@{/img/shue.png}"  /></div>
+                <div class="brand-logo-collapsed">
+                    <img class="img-responsive" alt="App Logo" th:src="@{/img/shue.png}" /></div>
+            </a>
+        </div>
+
+        <div class="nav-wrapper">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a title="缩小/扩大侧栏" class="hidden-xs" data-toggle-state="aside-collapsed" href="#"> <em class="fa fa-navicon"></em>
+                    </a>
+                    <a title="缩小/扩大侧栏" class="visible-xs sidebar-toggle" data-no-persist="true" data-toggle-state="aside-toggled" href="#"> <em class="fa fa-navicon"></em>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a title="写文章"  href="/userWritePage" target="_blank">
+                        写
+                    </a>
+                </li>
+                <li>
+                    <a title="搜索" data-search-open="" href="#">
+                        <em class="icon-magnifier"></em>
+                    </a>
+                </li>
+                <li class="dropdown dropdown-list">
+                    <a title="消息通知" data-toggle="dropdown" href="#">
+                        <em class="icon-bell"></em>
+
+                        <div class="label label-danger" id="noticeNum"></div>
+                    </a>
+
+                    <ul class="dropdown-menu animated flipInX">
+                        <li>
+                            <div class="list-group">
+                                <a class="list-group-item" href="javascript:void(0);" onclick="showNotice('letter')">                              <div class="media-box">
+                                    <div class="pull-left">
+                                        <em class="fa fa-bell fa-2x text-danger"></em>
+                                    </div>
+                                    <div class="media-box-body clearfix">
+                                        <p class="m0">私信我的</p>
+                                        <p class="m0 text-muted">
+                                            <!--<small>0 新消息</small>-->
+                                            <small id="newLetterNotice"></small>
+                                            <input id="newLetterNoticeCount" type="hidden" />
+                                        </p>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a title="设置" data-no-persist="true" data-toggle-state="offsidebar-open" href="javascript:void(0);">
+                        <em class="icon-settings"></em>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <form class="navbar-form"  role="search">
+            <div class="form-group has-feedback">
+                <input id="searchKey" type="text" class="form-control" placeholder="输入并且按回车确定..." />
+                <div class="fa fa-times form-control-feedback" data-search-dismiss=""></div>
+            </div>
+            <button  class="hidden btn btn-default" type="button" >提交</button>
+        </form>
+    </nav>
+
+    <script type='text/javascript'>
+        document.onkeydown = function(e){
+            if(!e) e = window.event;//火狐中是 window.event
+            if((e.keyCode || e.which) == 13){
+                window.event ? window.event.returnValue = false : e.preventDefault();
+                var key=document.getElementById("searchKey").value;
+                    if(key!=''){
+                    locationUrl('/search/'+key,"");
+                }
+            }
+        }
+    </script>
+
+</header>
+
+</body>
+
+</html>

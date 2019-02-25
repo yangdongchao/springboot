@@ -1,0 +1,100 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="Bootstrap Admin App + jQuery"/>
+    <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin"/>
+    <title>SHUE | 让考试更简单</title>
+    <link rel="icon" href="/img/ourIcon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/vendor/simple-line-icons/css/simple-line-icons.css}">
+    <link rel="stylesheet" th:href="@{/media/css/bootstrap.css}" id="bscss">
+    <link rel="stylesheet" th:href="@{/media/css/app.css}" id="maincss1">
+    <link rel="stylesheet" th:href="@{/media/css/theme-i.css}" id="maincss">
+</head>
+<script th:src="@{/vue/vue.min.js}"></script>
+<script th:src="@{/jquery/jquery.min.js}"></script>
+<body>
+<div class="wrapper">
+    <div class="block-center mt-xl wd-xl">
+        <div class="panel panel-dark panel-flat">
+            <div class="panel-heading text-center">
+                <a href="/index">
+                    <img src="/img/shue.png" alt="Image" class="block-center img-rounded"/>
+                </a>
+            </div>
+            <div class="panel-body" id="loginPage">
+                <p class="text-center pv">请登录</p>
+                <form id="form" data-parsley-validate="true" onsubmit="return false">
+                    <div class="form-group has-feedback">
+                        <input type="text" placeholder="登录名称" v-model="username" class="form-control" data-parsley-error-message="请输入邮箱地址或登录名称" required="required" />
+                        <span class="fa fa-envelope form-control-feedback text-muted"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="password" placeholder="密码" v-model="password" class="form-control" data-parsley-error-message="请输入密码" required="required" />
+                        <span class="fa fa-lock form-control-feedback text-muted"></span>
+                    </div>
+                    <div class="clearfix">
+                        <div class="pull-right">
+                            <a href="/forgotPassword" class="text-muted">忘记密码？</a>
+                        </div>
+                    </div>
+                    <button v-on:click="login" class="btn btn-block btn-primary mt-lg">登录</button>
+                </form>
+                <p></p>
+                <div id="errorMsg" class="alert alert-danger text-center" style="display:none;"></div>
+                <p class="pt-lg text-center">需要注册？</p>
+                <a href="/registerPage" class="btn btn-block btn-default">现在就注册</a>
+            </div>
+        </div>
+        <div class="p-lg text-center">
+            <span>&copy;</span>
+            <span>2019</span>
+            <span>-</span>
+            <span>2020</span>
+            <br/>
+            <span>ydc Liuwen Li  Johnson</span>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/vendor/parsleyjs/dist/parsley.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+<script type='text/javascript'>
+    Vue.http.options.emulateJSON = true;
+    var loginPage = new Vue({
+        el: '#loginPage',//绑定id=loginPage的标签
+        data: {
+            'username': '',
+            'password': ''
+        },
+        methods: {
+            login: function(event){
+                var ok = $('#form').parsley().isValid({force: true});
+                //验证用户名，密码是否为空
+                if(!ok){
+                    return;
+                }
+                var datas={
+                    //将你填写的用户名和密码复制给userName,password两个变量里。
+                    userName: this.username,
+                    password: this.password
+                };
+                this.$http.post('/loginPage',datas).then(function(response){
+                    //类似于提交表单的操作,"/loginPage"是提交到后端对应的地方,datas是携带的数据，也就是说，我将要把datas提交给后端的"/loginPage"，(then)接着后端会返回给我一个数据类型，这里我用response来接收。
+                    if(response.data.rspCode == '000000'){
+                        //后端会返回登录成功与否的信息
+                        window.open(response.data.data, '_self');
+                    }else{
+                        $("#errorMsg").html(response.data.rspMsg);
+                        $("#errorMsg").show();
+                    }
+                }, function(response){
+                    console.log('error');
+                })
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="lay :: htmlhead" th:with="title='favorites'">
+    <title>完整demo</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+</head>
+<script type="text/javascript" charset="utf-8" th:src="@{/ueditor.config.js}"></script>
+<script type="text/javascript" charset="utf-8" th:src="@{/ueditor.all.js}"> </script>
+<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+<script type="text/javascript" charset="utf-8" th:src="@{/lang/zh-cn/zh-cn.js}"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<script th:src="@{/vendor/toastr/toastr.min.js}"></script>
+<!--<style type="text/css">-->
+<!--div{-->
+<!--width:100%;-->
+<!--}-->
+<!--</style>-->
+<style>
+    .click{
+        height: 21px;
+        line-height: 21px;
+        padding: 0 11px;
+        background: #02bafa;
+        border: 1px #26bbdb solid;
+        border-radius: 3px;
+        /*color: #fff;*/
+        display: inline-block;
+        text-decoration: none;
+        font-size: 15px;
+        outline: none;
+    }
+</style>
+<body>
+<script th:src="@{/vendor/jquery/dist/jquery.js}"></script>
+<script th:src="@{/index/js/freelancer.min.js}"></script>
+<link th:href="@{/index/css/freelancer.min.css}" rel="stylesheet" />
+
+<nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom" style="height: 10%">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="/index">SHUE</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="hidden">
+                    <a href="#page-top"></a>
+                </li>
+                <!--<li>
+                    <a href="/lookAround/standard/ALL">随便看看</a>
+                </li>-->
+                <li>
+                    <a href="/login" th:unless="${session.USER_CONTEXT != null}">登录</a>
+                    <a href="/" th:if="${session.USER_CONTEXT != null}" th:text="${session.USER_CONTEXT.getUserName()}" class="userName"></a>
+                </li>
+                <li>
+                    <a href="#">修改文章</a>
+                </li>
+            </ul>
+        </div>
+        <!--<button onclick="insertHtml()" value="插入">插入</button>-->
+        <!-- /.navbar-collapse -->
+    </div>
+    <script>
+        (function($) {
+            $('body').scrollspy({
+                target: '.navbar-fixed-top',
+                offset: 51
+            });
+            $('#mainNav').affix({
+                offset: {
+                    top: 100
+                }
+            })
+        })(jQuery);
+    </script>
+    <!-- /.container-fluid -->
+</nav>
+<div style="margin-top: 7%;margin-left: 10%">
+    <!--<span id="test"></span>-->
+    <button th:if="${topic.getTopicId()}" onclick="insertHtml()" class="click" style="margin-bottom: 15px">导入原文</button>
+    <button onclick="setContent() " class="click" style="margin-bottom: 15px">清空文章</button>
+    <input type="text" id="yourTitle" placeholder="请输入文章标题" maxlength="64" class="form-control" style="width: 80%">
+    <select id="selectBorad" style="margin-top: 10px">
+       <option th:each="board:${boards}" th:value="${board.getBoardId()}" th:text="${board.getBoardName()}"></option>
+    </select>
+    <h2>编辑正文</h2>
+    <script id="editor" type="text/plain" style="width:1024px;height:500px;"></script>
+    </div>
+    <div id="saveBtn" class="btn btn-primary btn-block" onclick="saveUserTopic()" style="width:27%;margin-left:37%")>保存修改</div>
+    <input type="hidden" id="check2" th:value="${topic.getTopicId()}">
+        <input type="hidden" id="getContent3" th:value="${topic.getDecription()}">
+        <input type="hidden" id="getTitle3" th:value="${topic.getTopicTitle()}">
+
+    <script type="text/javascript">
+
+    //实例化编辑器
+    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+    var ue = UE.getEditor('editor');
+
+    function saveUserTopic() {
+        //alert(11);
+        var id = $("#check2").val();
+        //alert(id);
+        if(id===0){
+            toastr.fail("请先登录");
+            return;
+        }
+        var content = UE.getEditor('editor').getContent();
+        var html =UE.getEditor('editor').getContentTxt();
+        var title = $("#yourTitle").val();
+        var boardId=$("#selectBorad option:selected").val();
+        //alert(title);
+        $.ajax({
+            async: false,
+            type: 'POST',
+            dataType: 'json',
+            data: {'html':html, 'title':title,'content':content,'boardId':boardId},
+            url: '/userTopicAmend/'+id,
+            error : function(XMLHttpRequest, textStatus, errorThrown){
+                console.log(XMLHttpRequest);
+                console.log(textStatus);
+                console.log(errorThrown);
+            },
+            success: function (as) {
+                toastr.success("修改成功");
+            }
+        })
+    }
+
+    function isFocus(e){
+        alert(UE.getEditor('editor').isFocus());
+        UE.dom.domUtils.preventDefault(e);
+    }
+    function setblur(e){
+        UE.getEditor('editor').blur();
+        UE.dom.domUtils.preventDefault(e)
+    }
+    function insertHtml() {
+        var va= $("#getContent3").val();
+        var t = $("#getTitle3").val();
+       // alert(t);
+        //$("#test").html(t);
+        $("#yourTitle").val(t);
+            // var value = prompt('插入内容', va);
+            //UE.getEditor('editor').execCommand('insertHtml', value);
+        // var value = prompt('<h1>hhhhh</h1>', '');
+        UE.getEditor('editor').execCommand('insertHtml', va);
+    }
+    function createEditor() {
+        enableBtn();
+        UE.getEditor('editor');
+    }
+    function getAllHtml() {
+        var ans = UE.getEditor('editor').getAllHtml();
+    }
+    function getContent() {
+        //alert(11);
+        var id = [[${session.USER_CONTEXT==null?0:session.USER_CONTEXT.getUserId()}]];
+        // id='4';
+        // var arr = [];
+        // arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+        // arr.push("内容为：");
+        // arr.push(UE.getEditor('editor').getContent());
+        // alert(arr.join("\n"));
+
+        var ans= UE.getEditor('editor').getAllHtml();
+        alert(ans);
+        $.ajax({
+            async: false,
+            type: 'POST',
+            dataType: 'json',
+            data: 'html='+ans,
+            url: '/userTopicSave/'+id,
+            error : function(XMLHttpRequest, textStatus, errorThrown){
+                console.log(XMLHttpRequest);
+                console.log(textStatus);
+                console.log(errorThrown);
+            },
+            success: function (as) {
+                alert("保存成功");
+            }
+        })
+    }
+    function getPlainTxt() {
+        var arr = [];
+        arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
+        arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getPlainTxt());
+        alert(arr.join('\n'))
+    }
+    function setContent() {
+        //var arr = [];
+       // arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
+        UE.getEditor('editor').setContent(' ', 0);
+        //alert(arr.join("\n"));
+    }
+    function setDisabled() {
+        UE.getEditor('editor').setDisabled('fullscreen');
+        disableBtn("enable");
+    }
+
+    function setEnabled() {
+        UE.getEditor('editor').setEnabled();
+        enableBtn();
+    }
+
+    function getText() {
+        //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
+        var range = UE.getEditor('editor').selection.getRange();
+        range.select();
+        var txt = UE.getEditor('editor').selection.getText();
+        alert(txt)
+    }
+
+    function getContentTxt() {
+        //var arr = [];
+        //arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
+        //arr.push("编辑器的纯文本内容为：");
+        //arr.push(UE.getEditor('editor').getContentTxt());
+        //alert(arr.join("\n"));
+        return UE.getEditor('editor').getContentTxt();
+    }
+    function hasContent() {
+        var arr = [];
+        arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
+        arr.push("判断结果为：");
+        arr.push(UE.getEditor('editor').hasContents());
+        alert(arr.join("\n"));
+    }
+    function setFocus() {
+        UE.getEditor('editor').focus();
+    }
+    function deleteEditor() {
+        disableBtn();
+        UE.getEditor('editor').destroy();
+    }
+    function disableBtn(str) {
+        var div = document.getElementById('btns');
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+        for (var i = 0, btn; btn = btns[i++];) {
+            if (btn.id == str) {
+                UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+            } else {
+                btn.setAttribute("disabled", "true");
+            }
+        }
+    }
+    function enableBtn() {
+        var div = document.getElementById('btns');
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+        for (var i = 0, btn; btn = btns[i++];) {
+            UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+        }
+    }
+
+    function getLocalData () {
+        alert(UE.getEditor('editor').execCommand( "getlocaldata" ));
+    }
+
+    function clearLocalData () {
+        UE.getEditor('editor').execCommand( "clearlocaldata" );
+        alert("已清空草稿箱")
+    }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head th:include="lay :: htmlhead" th:with="title='favorites'">
+</head>
+<body>
+<section>
+    <div class="content-wrapper">
+        <div class="unwrap">
+            <div class="mast" th:style="'background-image:url('+@{(${currentUser.backPicture} == null ? 'img/profile-bg.jpg': ${currentUser.backPicture})} +')'">
+                <div class="bg-cover"> <a href="javascript:void(0);" th:onclick="'locationUrl(\'/uploadBackgroundPage\',\'\');'" id="background">
+                    <!-- 权限设置，如果是本人，则可以修改背景图片-->
+                    <div th:if="${session.USER_CONTEXT.getUserId()==currentUser.getUserId()}"> <img src="img/camera.png" alt=""/> <span>上传背景图</span> </div>
+                </a>
+                    <div class="p-xl text-center text-white"> <a href="javascript:void(0);"> <img th:src="${currentUser.getPhoto() == null ? 'img/favicon.png':currentUser.getPhoto()}" alt="" class="img-thumbnail img-circle thumb128"/></a>
+                        <h3 class="m0 mt" th:text="${currentUser.getUserName()}" id="userUserName">用户昵称</h3>
+                        <p th:if="${session.USER_CONTEXT.getUserId()==currentUser.getUserId()}" th:text="${currentUser.getEmail()}">123456789@qq.com</p>
+                        <p th:text="${currentUser.getSignature()== null ? '暂无简介': currentUser.getSignature()}" id="userIntroduction">暂无简介</p>
+                        <a href="javascript:void(0);" th:if="${session.USER_CONTEXT.getUserId()!=currentUser.getUserId()}" id="follow"></a>
+
+                        <a href="javascript:void(0);" th:if="${session.USER_CONTEXT.getUserId()!=currentUser.getUserId()}" class="btn btn-success" data-toggle="modal" data-target="#modal-letter">私信</a>
+                    </div>
+                </div>
+                <div class="text-center bg-gray-dark p-lg mb">
+                    <div class="row row-table">
+                        <div class="col-xs-4 br">
+                            <h3 class="m0" th:text="${topicNum}" id="totalCount">4</h3>
+                            <p class="m0"> <span >发帖</span>
+                        </div>
+                        <div class="col-xs-4 br">
+                            <h3 class="m0" th:text="${(follower==null)?0:follower.size()}">0</h3>
+                            <p class="m0"> <span>关注</span> </p>
+                        </div>
+                        <div class="col-xs-4">
+                            <h3 class="m0" th:text="${fans==null?0:fans.size()}" id="followed">0</h3>
+                            <p class="m0"> <span>粉丝</span> </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-lg">
+                <div class="row" >
+                    <!--<div layout:fragment="usercontent" id="usercontent" ></div>-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading text-center">关注的人</div>
+                        <div class="list-group ng-scope" th:each=" follow : ${follower}"> <a class="media p mt0 list-group-item" href="javascript:void(0);" th:onclick="'locationUrl(\'/userIndex/'+${follow.getUserId()}+'/0\',\'\');'"> <span class="pull-left"> <img  alt="Image" class="media-object img-circle thumb32" src="img/dummy.png" th:src="${follow.photo !=null? follow.photo:'img/dummy.png'}" /> </span> <span class="media-body"> <span class="media-heading"> <strong class="ng-binding" th:text="${follow.userName}">粉丝1</strong> <small class="text-muted ng-binding" th:text="${follow.signature == null ? '暂无简介' : follow.signature.length() gt 10 ? follow.signature.substring(0,10)+'...' : follow.signature}">暂无简介</small> </span> </span> </a> </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading text-center">粉丝</div>
+                        <div class="list-group ng-scope" th:each=" followed : ${fans}"> <a class="media p mt0 list-group-item" href="javascript:void(0);" th:onclick="'locationUrl(\'/userIndex/'+${followed.getUserId()}+'/0\',\'\');'"> <span class="pull-left"> <img  alt="Image" class="media-object img-circle thumb32" src="img/dummy.png" th:src="${followed.getPhoto() !=null? followed.getPhoto():'img/dummy.png'}" /> </span> <span class="media-body"> <span class="media-heading"> <strong class="ng-binding" th:text="${followed.getUserName()}">粉丝1</strong> <small class="text-muted ng-binding" th:text="${followed.getSignature() == null ? '暂无简介' : followed.getSignature().length() gt 10 ? followed.getSignature().substring(0,10)+'...' : followed.getSignature()}">暂无简介</small> </span> </span> </a> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="collectId" id="collectId" />
+        <input type="hidden"  id="userId" th:value="${currentUser.getUserId()}" />
+        <!--<input type="hidden" id="myself" th:value="${}"/>-->
+    </div>
+</section>
+</body>
+<script type='text/javascript' th:inline="javascript">
+    $(function() {
+        //alert(1);
+        var isFollow = /*[[${yes}]]*/;
+        //alert(isFollow);
+        if (isFollow === 0) {
+            $("#follow").attr("class", "btn btn-default");
+            $("#follow").attr("onclick", "getLove(2)");
+            $("#follow").text("取消关注");
+        } else {
+            $("#follow").attr("class", "btn btn-success");
+            $("#follow").attr("onclick", "getLove(1)");
+            $("#follow").text("关注");
+        }
+    });
+</script>
+</html>

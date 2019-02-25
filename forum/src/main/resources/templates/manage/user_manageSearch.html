@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="Bootstrap Admin App + jQuery"/>
+    <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin"/>
+    <title>SHUE | 让考试更简单</title>
+    <link rel="icon" href="/img/ourIcon.ico" type="image/x-icon" />
+    <script src="jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="media/css/bootstrap.css" id="bscss">
+    <link rel="stylesheet" href="media/css/app.css" id="maincss1">
+    <link rel="stylesheet" href="media/css/theme-i.css" id="maincss">
+    <script src="/jquery/jquery.twbsPagination.js" type="text/javascript"></script>
+
+    <style>
+        input[type="checkbox"]{width:20px;height:20px;display: inline-block;text-align: center;vertical-align: middle; line-height: 18px;position: relative;}
+        input[type="checkbox"]::before{content: "";position: absolute;top: 0;left: 0;background: #fff;width: 100%;height: 100%;border: 1px solid #d9d9d9}
+        input[type="checkbox"]:checked::before{content: "\2713";background-color: rgb(93, 163, 184);position: absolute;top: 0;left: 0;width:100%;border: 1px solid #fff;color:#fff;font-size: 12px;font-weight: bold;}
+    </style>
+</head>
+<body>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <!--div class="panel-title">控制台</div-->
+                    <div class="col-md-12">
+                        <h2>控制台</h2>
+                        <br><br>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="col-md-3"><input class="form-control" placeholder="请输入用户名搜索" id="SearchUserName"></div>
+                        <button class="btn btn-default" id="SearchSubmit" onclick="userSearch()">搜索</button>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+
+                    <div class="col-md-offset-9">
+                        <span style="font-size: 16px;font-weight:bold;">使勾选用户</span>
+                        <button type="button" class="btn btn-warning" id="allunban" onclick="unLockAll()">解封</button>
+                        <button type="button" class="btn btn-danger" id="allban" onclick="lockAll()">封禁</button>
+                        <!--button type="button" class="btn btn-green">成为管理员</button-->
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <!-- Table -->
+                    <table class="table  table-striped">
+                        <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectall">
+                            </th>
+                            <th>用户名</th>
+                            <th>用户积分</th>
+                            <th>状态</th>
+                            <th><div style="text-align:center">操作</div></th>
+                        </tr>
+                        </thead>
+                        <tbody id='UserContent'>
+                        <tr th:each="user:${users}">
+                            <td>
+                                <div style="padding-bottom: 5%">
+                                    <input type="checkbox" name="selectflag" th:id="${user.userId}">
+                                </div>
+                            </td>
+                            <td><a th:text="${user.getUserName()}">testname</a></td>
+                            <td><a th:text="${user.getCredits()}">xxxxxxxxx</a></td>
+                            <td th:text="${user.getTypeName()}">普通用户</td>
+                            <td align="center">
+                                <button th:if="${user.getUser_type()}!=0" class="btn btn-danger"  name="ban" th:onclick="'lock(' + ${user.userId} + ',\'lock\');'" >封禁</button>
+                                <button th:if="${user.getUser_type()}==0" class="btn btn-warning"  name="ban" th:onclick="'unlock(' + ${user.userId} + ',\'unlock\');'" >解除封禁</button>
+                                <div th:if="${session.USER_CONTEXT.getUser_type()}==3"><button th:if="${user.getUser_type()}!=2" class="btn btn-green"  name="manger" th:onclick="'manager(' + ${user.userId} + ',\'manager\');'" >设为管理员</button></div>
+                                <div th:if="${session.USER_CONTEXT.getUser_type()}==3"><button th:if="${user.getUser_type()}==2" class="btn btn-default"  name="ban" th:onclick="'unmanager(' + ${user.userId} + ',\'unmanager\');'">取消管理员</button></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#selectall").click(function() {  //全选框
+        if (this.checked) {
+            $("input[name='selectflag']:checkbox").each(function() {
+                $(this).prop("checked",true);
+            })
+        } else {   //反之 取消全选
+            $("input[name='selectflag']:checkbox").each(function() {
+                $(this).prop("checked",false);
+            })
+        }
+    });
+
+    function lockAll() {
+        $("input[name='selectflag']:checkbox").each(function() {
+            if($(this).prop("checked")===true){
+                lock2($(this).attr("id"));
+            }
+            //$(this).prop("checked",true);
+        });
+        toastr.success("操作成功");
+        $("#userManage").click();
+    }
+
+
+    function unLockAll() {
+        $("input[name='selectflag']:checkbox").each(function() {
+            if($(this).prop("checked")===true){
+                unlock2($(this).attr("id"));
+            }
+            //$(this).prop("checked",true);
+        });
+        toastr.success("操作成功");
+        $("#userManage").click();
+    }
+    function lock2(userId) {
+        $.ajax({
+            async: false,
+            type: 'POST',
+            dataType: 'json',
+            data:"",
+            url: '/userManege/lock/'+userId,
+            error : function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest);
+                console.log(textStatus);
+                console.log(errorThrown);
+            },
+            success: function(response){
+                //$('#modal-remove').modal('hide');
+                if(response.rspCode==="000000")
+                {
+                    //toastr.success("操作成功");
+                    //$("#userManage").click();
+                }
+                else{
+                    toastr.fail("操作失败");
+                }
+            }
+        });
+    }
+
+    function unlock2(userId) {
+        $.ajax({
+            async: false,
+            type: 'POST',
+            dataType: 'json',
+            data:"",
+            url: '/userManege/unlock/'+userId,
+            error : function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest);
+                console.log(textStatus);
+                console.log(errorThrown);
+            },
+            success: function(response){
+                //$('#modal-remove').modal('hide');
+                if(response.rspCode==="000000")
+                {
+
+                }
+                else{
+                    toastr.fail("操作失败");
+                }
+            }
+        });
+    }
+
+    function userSearch() {
+        var key = $("#SearchUserName").val();
+        if(key==null){
+            toastr.fail("查询内容不能为空");
+        }
+        else {
+            locationUrl("/userManage/search/"+key);
+        }
+
+    }
+    function listUserCollect(collects,listId){
+        var totalContent="";
+        var userId="", topicId ="";
+        var userName = "", topicName = "", topicUrl = "";
+        var userStatus = false;
+        for(var i=0;i<collects.length;++i){
+            userId = collects[i].userId;
+            topicId = collects[i].topicId;
+            userName = collects[i].user.userName;
+            topicName = collects[i].topicTitle;
+            topicUrl = collects[i].url;
+            userStatus = collects[i].userStatus;
+            //0-被封了 1-普通 2-管理员 3-超管 （不能通过管理面板提升为超管）
+            var item = "<tr>"+
+                "       <td>"+
+                "           <div style=\"padding-bottom: 5%\">"+
+                "               <input type=\"checkbox\"  name=\"selectflag\" id=" +userId+ ">"+
+                "           </div>"+
+                "       </td>"+
+                "       <td><a>"+userName+"</a></td>"+
+                "       <td><a>+"+topicUrl+"</a></td>"+
+                "       <td>"+userStatus+"</td>"+
+                "       <td align=center>";
+            //"           <button type=\"button\" class=\"btn btn-warning\" id="+userId+" name=\"ban\">解封</button>"+
+            if(userStatus == 0) item+=       "<button type=\"button\" class=\"btn btn-warning\" id="+userId+" name=\"unban\">解封</button>";
+            else if(userStatus == 1){
+                item+=    "<button class=\"btn btn-danger\" id="+userId+" name=\"ban\">封禁</button>"+
+                    "<button class=\"btn btn-green\" id="+userId+" name=\"manger\">管理员</button>";
+            }
+            else if(userStatus == 3){
+                item+="<button type=\"button\" class=\"btn btn-default\" id="+userId+" name=\"unmanger\">撤除管理</button>";
+            }
+
+            item+= "       </td>"+
+                "   </tr>"
+            totalContent += item;
+        }
+        console.log(totalContent);
+        $("#"+listId).append(totalContent);
+    }
+
+
+
+</script>
+
+
+</body>
+</html>

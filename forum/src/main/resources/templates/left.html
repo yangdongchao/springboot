@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside class="aside" th:fragment="left">
+    <div class="aside-inner">
+        <nav class="sidebar" data-sidebar-anyclick-close="">
+            <ul class="nav">
+                <li class="has-user-block">
+                    <div>
+                        <div class="item user-block">
+                            <div class="user-block-picture">
+                                <div class="user-block-status">
+                                    <a  href="javascript:void(0);"  th:onclick="'locationUrl(\'/userIndex/'+${session.USER_CONTEXT!=null?session.USER_CONTEXT.getUserId():0}+'/0\',\'\');'">
+                                        <img alt="" class="img-thumbnail img-circle"  th:src="${(session.USER_CONTEXT) == null?'img/favicon.png':session.USER_CONTEXT.getPhoto()}" id="leftProfilePicture"/></a>
+                                    <div class="circle circle-success circle-lg"></div>
+                                </div>
+                            </div>
+                            <div class="user-block-info">
+                                <div class="user-block-name" th:text="'欢迎  '+${session.USER_CONTEXT==null?' ':session.USER_CONTEXT.getUserName()}" id="leftUserName">欢迎 欢迎</div>
+                                <div class="user-block-role" th:text="${session.USER_CONTEXT == null ? '这个人很懒' : session.USER_CONTEXT.getSignature()}" id="leftIntroduction">暂无简介</div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-heading ">主导航</li>
+                <li class="" id="home">
+                    <a title="首页" id="home-a" href="javascript:void(0);"  onclick="locationUrl('/userHome','home')">
+                        <em class="icon-home"></em>
+                        <span>首页</span>
+                    </a>
+                </li>
+                <li class=" " id="unread">
+                </li>
+                <!--<li class=" " >-->
+                    <!--<a data-toggle="collapse" title="收藏" onclick="locationUrl('/userLove','explore')">-->
+                        <!--<em class="icon-folder"></em>-->
+                        <!--<span >我的收藏</span>-->
+                    <!--</a>-->
+                <!--</li>-->
+                <li class=" " id="explore2" >
+                    <a title="收藏" href="javascript:void(0);"  onclick="locationUrl('/userLove','explore2')">
+                        <em class="icon-heart"></em>
+                        <span>我的收藏</span>
+                    </a>
+                </li>
+                <li class=" " id="explore" >
+                    <a title="发现" href="javascript:void(0);"  onclick="locationUrl('/userContent','explore')">
+                        <em class="icon-compass"></em>
+                        <span>发现</span>
+                    </a>
+                </li>
+
+                <li class="nav-heading ">更多</li>
+                <li class=" " id="tool">
+                    <a title="我的文章" href="javascript:void(0);" onclick="locationUrl('/myArticle','tool')">
+                        <em class="icon-user"></em>
+                        <span>我的文章</span>
+                    </a>
+                </li>
+
+                <li th:if="${session.USER_CONTEXT.getUser_type()}>=2" class=" " id="import">
+                    <a id="userManage" title="用户管理界面" href="javascript:void(0);" onclick="locationUrl('/userManage','import')">
+                        <em class="icon-login"></em>
+                        <span>用户管理</span>
+                    </a>
+                </li>
+                <li th:if="${session.USER_CONTEXT.getUser_type()}>=2" class=" " id="topic_manage">
+                    <a id="topicManage" title="文章管理界面" href="javascript:void(0);" onclick="locationUrl('/administrator','topic_manage')">
+                        <em class="icon-login"></em>
+                        <span>文章管理</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <script type='text/javascript' th:inline="javascript">
+        window.onload = function(){
+            //alert(1);
+            $("#home-a").click();
+            //code
+        };
+    </script>
+</aside>
+</body>
+
+</html>
+

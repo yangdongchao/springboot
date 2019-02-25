@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" th:fragment="usercontent" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+<input hidden="hidden" id="userId" th:value="${session.USER_CONTEXT==null?0:session.USER_CONTEXT.getUserId()}">
+<div class="col-md-offset-1 col-lg-10 col-md-10 mt" id="standard">
+    <ul class="timeline-alt" id="collectStandardList">
+        <li th:each="collect,collectStat : ${collects}" > <a href="javascript:void(0);" class="hidden-xs timeline-badge sharing-user-avatar" th:style="'background-image:url(/' + @{(${collect.user.photo==null?'img/favicon.png':collect.user.photo})} + ')'" onclick="locationUrl()"></a>
+            <input type="hidden" id="topicUser" th:value="${collect.getUserId()}">
+            <!-- 定义一个隐藏的input ，用于存放发表该话题的userId，目的是区分这个话题的发表者是不是当前浏览用户-->
+            <div class="timeline-panel">
+                <div class="popover right">
+                    <div class="arrow"></div>
+                    <div class="popover-content">
+                        <div class="table-grid">
+                            <div class="col">
+                                <div class="pull-right dropdown dropdown-list" th:if="${collect.userId==session.USER_CONTEXT.getUserId()}"> <a href="#" data-toggle="dropdown" class="sharing-more-button" > <span class="fa fa-angle-down"></span> </a>
+                                    <ul class="dropdown-menu animated bounceIn">
+                                        <li>
+                                            <div class="list-group"> <a href="javascript:void(0);" th:onclick="'getCollect(' + ${collect.topicId} + ',\'usercontent\');'" class="list-group-item">
+                                                <div class="media-box">
+                                                    <div class="pull-left"> <em class="fa fa-pencil-square-o fa-2x fa-fw text-info"></em> </div>
+                                                </div>
+                                            </a> <a href="javascript:void(0);" class="list-group-item" th:onclick="'onCollect(' + ${collect.topicId} + ',\'usercontent\');'">
+                                                <div class="media-box">
+                                                    <div class="pull-left"> <em class="fa fa-trash fa-2x fa-fw text-danger"></em> </div>
+                                                    <div class="media-box-body clearfix">
+                                                        <p class="m0">删除</p>
+                                                        <p class="m0 text-muted"> <small>该收藏会永久删除</small> </p>
+                                                    </div>
+                                                </div>
+                                            </a> </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="m0"> <a href="javascript:void(0);" class="text-muted" th:text="${collect.user.userName}" th:onclick="'locationUrl(\'/userIndex/' + ${collect.userId} + '/0\',\'\');'" >user name</a> <a th:if="${collect.getUserId()==session.USER_CONTEXT.getUserId()}" th:id="'private' + ${collect.topicId}"   class="deco-none"  title="设为私密"  href="javascript:void(0);"  th:style="'display:' + @{(${collect.type}=='PRIVATE' ? 'none' : 'inline-block')} + ''"  th:onclick="'changePrivacy(' + ${collect.topicId} + ',\'PRIVATE\');'"> <span class="fa fa-lock" style="color: #eee;"></span> </a>  <small class="ml-sm text-muted" th:text="${collect.createTime}">6天前 </small> </div>
+                            </div>
+                        </div>
+                        <div class="m0" th:text="${collect.topicTitle}" hidden="hidden"></div>
+                        <div class="media resource-card-thumbnail"> <a  th:onclick="'saveLookRecord(' + ${collect.userId} + ');'" th:href="@{${collect.url}}" class="pull-left" target="_blank">
+                            <div class="media-object resource-card-image"  th:style="'background-image:url(' + @{(${collect.logoUrl}=='' ? '/img/favicon.png' : ${collect.logoUrl})} + ')'" ></div>
+                        </a>
+                            <div class="media-body">
+                                <h4 class="visible-xs media-heading resource-card-title-xs"> <a target="_blank" th:onclick="'saveLookRecord(' + ${collect.topicId} + ');'" th:href="@{${collect.url}}" th:text="${collect.topicTitle}">title</a> </h4>
+                                <h3 class="hidden-xs media-heading resource-card-title"> <a target="_blank" th:onclick="'saveLookRecord(' + ${collect.topicId} + ');'" th:href="@{${collect.url}}" th:text="${collect.topicTitle}">title</a> </h3>
+                                <div class="hidden-xs resource-card-content">
+                                    <p  th:text="${collect.getDecription()}">decription</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m0"> <span class="icon-folder mr-sm" th:text="${collect.board.boardName}"></span>
+                            <div  class="pull-right hidden-xxs">
+                                <a th:id="'like' + ${collect.topicId}"  class="sharing-action-button" th:style="'display:' + @{(${collect.isPraise==1} ? 'none' : 'inline-block')} + ''"    th:onclick="'ChangePraise(' + ${collect.topicId} + ');'"> <span class="fa fa-thumbs-o-up"></span>
+                                    <show th:id="'likeS' + ${collect.topicId}"  th:text="|点赞(${collect.praise})|" ></show>
+                                </a>
+                                <!-- <if th:id="'unlikel' + ${collect.topicId}"  th:style="'display:' + @{(${collect.Praise} ? 'inline-block' : 'none')}+ ''" > | </if> -->
+                                <a th:id="'unlike' + ${collect.topicId}"  class="sharing-action-button" th:style="'display:' + @{(${collect.isPraise==1} ? 'inline-block' : 'none')}+ ''"    th:onclick="'ChangePraise(' + ${collect.topicId} + ');'">  <span class="fa fa-thumbs-up"></span>
+                                    <show th:id="'unlikeS' + ${collect.topicId}" th:text="|取消点赞(${collect.praise})|"></show>
+                                </a>
+                                <input th:id="'praiseC' + ${collect.topicId}" type="hidden" name="praiseC" th:value="${collect.praise}" />
+                                <input th:id="'commentC' + ${collect.topicId}" type="hidden" name="commentC" th:value="${collect.topicReplies}" />
+                                | <a  class="sharing-action-button btn-Comment" href="javascript:void(0);" th:onclick="'switchComment(' + ${collect.topicId} + ');'" > <span class="fa fa-Comment-o"></span>
+                                <show th:id="'commentS' + ${collect.topicId}" th:text="|评论(${collect.topicReplies})|"> 评论(0)</show>
+                            </a>
+                        </div>
+                        <div class="collapse" th:id="'collapse' + ${collect.topicId}">
+                            <Comments th:id="'commentList' + ${collect.topicId}"></Comments>
+                            <div class="media p0" th:id="'Comment' + ${collect.topicId}">
+                                <div class="media-body">
+                                    <form>
+                                        <div th:if="${session.USER_CONTEXT!=null}" class="input-group">
+                                            <input th:id="'commentContent' + ${collect.topicId}"   type="text" placeholder="输入评论..." class="form-control"/>
+                                            <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" th:onclick="'comment(' + ${collect.topicId} + ');'" >发送</button>
+                                            </span> </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <!-- <button id="loadStandardNoMore" class="mt-lg btn btn-warning btn-block" style="display:none" >没有更多了</button> -->
+    <!-- <button th:if="${collects.size() == 15}" id="loadStandardMore" class="mt-lg btn btn-primary btn-block" th:onclick="'loadStandardMore();'">加载更多</button> -->
+    <button  id="loadStandardMore" class="mt-lg btn btn-primary btn-block" onclick="loadMoreLove()" >加载更多</button>
+    <!--<div id="loadingStandard" class="loading-more"><img src="/img/loading.gif" width="64" height="64" /></div>-->
+    <br />
+    <br />
+    <br />
+    <!--<input type="hidden" id="userId" th:value="${user.id}"/>-->
+    <input type="hidden" th:if="${session.USER_CONTEXT!=null}" id="loginUser" th:value="${session.USER_CONTEXT.getUserId()}"/>
+</div>
+</body>
+<script type='text/javascript' th:inline="javascript">
+    $(function(){
+        page = 1;
+        if("standard" == standardStr){
+            $("#standard").show();
+            //$("#simple").hide();
+            $("#showModel").val("standard");
+        }else{
+            $("#standard").hide();
+            // $("#simple").show();
+            // $("#showModel").val("simple");
+        }
+    });
+</script>
+</html>

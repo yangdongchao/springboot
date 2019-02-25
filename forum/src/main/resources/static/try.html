@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="Bootstrap Admin App + jQuery"/>
+    <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin"/>
+    <title>SHUE | 让考试更简单</title>
+    <link rel="icon" href="/img/ourIcon.ico" type="image/x-icon" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/img/ourIcon.ico" type="image/x-icon" />
+    <title >SHUE | 让考试更简单</title>
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome/css/font-awesome.min.css}" />
+    <link rel="stylesheet" th:href="@{/vendor/simple-line-icons/css/simple-line-icons.css}"/>
+    <link rel="stylesheet" th:href="@{/vendor/animate.css/animate.min.css}"/>
+    <link rel="stylesheet" th:href="@{/vendor/toastr/toastr.min.css}"/>
+    <link rel="stylesheet" th:href="@{/media/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/media/css/app.css}" />
+    <link rel="stylesheet" th:href="@{/media/css/theme-i.css}" />
+    <style>
+        input[type="checkbox"]{width:20px;height:20px;display: inline-block;text-align: center;vertical-align: middle; line-height: 18px;position: relative;}
+        input[type="checkbox"]::before{content: "";position: absolute;top: 0;left: 0;background: #fff;width: 100%;height: 100%;border: 1px solid #d9d9d9}
+        input[type="checkbox"]:checked::before{content: "\2713";background-color:
+                rgb(93, 163, 184);position: absolute;top: 0;left: 0;width:100%;border: 1px solid #fff;color:#fff;font-size: 12px;font-weight: bold;}
+        .click_for_more{
+            margin:0 auto;
+            width:50%;
+        }
+    </style>
+    <!--<script th:src="@/jquery/jquery.min.js"></script>-->
+</head>
+<body>
+
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <!--div class="panel-title">控制台</div-->
+                    <div class="col-md-12">
+                        <h2>控制台</h2>
+                        <br><br>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="col-md-3"><input class="form-control" placeholder="请输入帖子名搜索" id="SearchUserName"></div>
+                        <button class="btn btn-default" id="SearchSubmit" onclick="findTopic()">搜索</button>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+
+                    <div class="col-md-offset-9">
+                        <span style="font-size: 16px;font-weight:bold;">使勾选文章</span>
+                        <button type="button" class="btn btn-danger" id="allban" onclick="batchDel()">删帖</button>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <!-- Table -->
+                    <table class="table  table-striped">
+                        <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectall">
+                            </th>
+                            <th>用户名</th>
+                            <th>帖子号</th>
+                            <th>标题</th>
+                            <th><div style="text-align:center">操作</div></th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="manageContent">
+
+                        <!--此处通过thymeleaf循环循环添加-->
+                        <tr th:each="collect,collectStat : ${collects}" style="width: 100%">
+                            <td>
+                                <div style="padding-bottom: 5%">
+                                    <input type="checkbox" name="selectflag" th:id="${collect.topicId}">
+                                </div>
+                            </td>
+                            <td>
+                                <a th:onclick="'locationUrl(\'/userIndex/' + ${collect.userId} + '/0\',\'\');'">
+                                    <span th:text="${collect.user.userName}">某用户</span>
+                                </a>
+                            </td>
+
+                            <td>
+                                <a th:href="@{${collect.url}}" target="_blank">
+                                    <span th:text="${collect.topicId}" >******</span>
+                                </a>
+                            </td>
+                            <td>
+                                <span th:text="${collect.topicTitle}">title</span>
+                            </td>
+                            <td align="center">
+                                <button class="btn btn-danger"  name="ban" th:onclick="'deleteCollect(' + ${collect.topicId} + ',\'usercontent\');'">删除</button>
+                                <a th:href="'deleteComment/'+${collect.topicId}" target="_blank">
+                                    <button class="btn btn-warning" name="manger">删评论</button>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <br>
+                <hr>
+                <!--加载更多-->
+                <div class="click_for_more">
+                    <button  id="loadStandardMore" class="mt-lg btn btn-primary btn-block" onclick="loadForMange()" >加载更多</button>
+                </div>
+                <input type="hidden" id="judge" value="">
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/jquery/jquery.min.js}"></script>
+<!--<script th:src="@{https://code.jquery.com/jquery-3.3.1.min.js}"></script>-->
+<script th:src="@{/vendor/jquery.form/jquery.form.min.js}"></script>
+<!--<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js}"></script>-->
+<script th:src="@{/vendor/modernizr/modernizr.custom.js}" ></script>
+<script th:src="@{/vendor/jQuery-Storage-API/jquery.storageapi.js}" ></script>
+<script th:src="@{/media/js/app.js}" ></script>
+<script th:src="@{/vendor/parsleyjs/dist/parsley.min.js}"></script>
+<script th:src="@{/vendor/toastr/toastr.min.js}"></script>
+<script th:src="@{/js/comm.js}" ></script>
+<script th:src="@{/js/layout.js}" ></script>
+<script th:src="@{/js/collect.js}" ></script>
+<script th:src="@{/js/letter.js}" ></script>
+<script th:src="@{/js/follow.js}"></script>
+<script>
+    $("#selectall").click(function() {  //全选框
+        if (this.checked) {
+            $("input[name='selectflag']:checkbox").each(function() {
+                $(this).prop("checked",true);
+            })
+        } else {   //反之 取消全选
+            $("input[name='selectflag']:checkbox").each(function() {
+                $(this).prop("checked",false);
+            })
+        }
+    });
+
+    function batchDel() {
+        $("input[name='selectflag']:checkbox").each(function () {
+
+            if($(this).prop("checked")===true){
+                deleteCollectAll($(this).attr("id"));
+            }
+        });
+        toastr.success("删除成功");
+        $("#topicManage").click();
+    }
+    function findTopic() {
+        var name=$("#SearchUserName").val();
+        if(name==null){
+            toastr.fail("搜索内容不能为空");
+        }
+        else{
+            locationUrl("/topicManage/search/"+name);
+        }
+    }
+</script>
+</body>
+</html>

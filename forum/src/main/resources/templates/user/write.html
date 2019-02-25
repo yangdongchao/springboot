@@ -1,0 +1,139 @@
+<html xmlns:th="http://www.thymeleaf.org" >
+<head th:include="lay :: htmlhead" th:with="title='favorites'"></head>
+<body>
+<script th:src="@{/vendor/jquery/dist/jquery.js}"></script>
+<script th:src="@{/index/js/freelancer.min.js}"></script>
+<link href="../../index/css/freelancer.min.css" rel="stylesheet" />
+
+<nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="/index">SHUE</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="hidden">
+                    <a href="#page-top"></a>
+                </li>
+                <!--<li>
+                    <a href="/lookAround/standard/ALL">随便看看</a>
+                </li>-->
+                <li>
+                    <a href="/login" th:unless="${session.USER_CONTEXT != null}">登录</a>
+                    <a href="/" th:if="${session.USER_CONTEXT != null}" th:text="${session.USER_CONTEXT.getUserName()}" class="userName"></a>
+                </li>
+                <li>
+                    <a href="/userWritePage">编辑文章</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <script>
+        (function($) {
+            $('body').scrollspy({
+                target: '.navbar-fixed-top',
+                offset: 51
+            });
+            $('#mainNav').affix({
+                offset: {
+                    top: 100
+                }
+            })
+        })(jQuery);
+    </script>
+    <!-- /.container-fluid -->
+</nav>
+<section>
+    <div class="content-wrapper">
+        <h3>编辑文章</h3>
+        <div class="container-fluid">
+            <div class="row">
+                <form id="feedback-form" action="#">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div class="panel">
+                            <div class="panel-heading">留下你智慧的结晶!</div>
+                            <div class="panel-body">
+                                <div id="errorMsg" class="alert alert-danger text-center" style="display:none;"></div>
+                                <div id="successMsg" class="alert alert-success text-center" style="display:none;"></div>
+                                <input type="text" id="userTitle" placeholder="请输入文章标题" maxlength="64" class="form-control">
+                                <div class="form-group" style="margin-top: 30px">
+                                    <textarea class="form-control" rows="3" placeholder="请输入正文！" id="feedbackAdvice" name="feedbackAdvice" maxlength="1024" onmousedown="closeErrorMsg()"></textarea>
+                                </div>
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li>
+                                        <a href="/userWriting" target="_parent">欢迎使用ueditor编辑文章</a>
+                                    </li>
+                                </ul>
+                                <div class="form-inline form-inline-feedback">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="saveFeedbackBtn" class="btn btn-primary btn-block" onclick="saveFeedBack()">提交</div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .form-inline-feedback{ display: flex;justify-content:space-between; }
+    .form-inline-feedback .form-group{ width: 49%; }
+    .form-inline-feedback .form-control{ width: 100%; }
+</style>
+<script type='text/javascript' th:inline="javascript">
+
+    function saveFeedBack(){
+        // var feedbackAdvice = document.getElementById("feedbackAdvice").value;
+        // var feedbackName = document.getElementById("userTitle").value;
+        // //var phone = document.getElementById("phone").value;
+        // if(feedbackAdvice==""){
+        //     $("#errorMsg").text("请输入您的反馈意见");
+        //     $("#errorMsg").show();
+        //     return;
+        // }
+        // if(feedbackName==""){
+        //     $("#errorMsg").text("请输入文章标题");
+        //     $("#errorMsg").show();
+        //     return;
+        // }
+        // $("#saveFeedbackBtn").attr("disabled","disabled");
+        // $("#errorMsg").hide();
+        // $.ajax({
+        //     type: "POST",
+        //     url:"/topic/save2",
+        //     data:{'title':feedbackName.value,'content':feedbackAdvice},
+        //     success: function(response) {
+        //         $("#successMsg").text("谢谢您的宝贵建议，我们将继续改进");
+        //         $("#successMsg").show();
+        //         $("#saveFeedbackBtn").removeAttr("disabled");
+        //     },
+        //     error: function (jqXHR, textStatus, errorThrown) {
+        //         $("#saveFeedbackBtn").removeAttr("disabled");
+        //         console.log(jqXHR.responseText);
+        //         console.log(jqXHR.status);
+        //         console.log(jqXHR.readyState);
+        //         console.log(jqXHR.statusText);
+        //         console.log(textStatus);
+        //         console.log(errorThrown);
+        //     }
+        // });
+        $("#errorMsg").html("该页面已被管理员暂停使用，请转到ueditor页面进行编辑");
+        $("#errorMsg").show();
+    }
+    function closeErrorMsg(){
+        $("#successMsg").hide();
+        $("#errorMsg").hide();
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro);
+body {
+  background-color: #ea4848;
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+}
+
+.dropdown {
+  width: 330px;
+  height: 50px;
+  margin: 40px auto;
+  perspective: 1000px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dropped {
+  height: 200px;
+}
+
+.item {
+  width: 300px;
+  height: 50px;
+  line-height: 50px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin: 0 0;
+  padding: 0 20px;
+  background-color: white;
+  transition: transform .15s linear;
+  cursor: pointer;
+  user-select: none;
+}
+.item:last-child {
+  transform: translate3d(0, -150px, 0);
+}
+.item:not(:last-child) {
+  transform: translate3d(0, 50px, 0);
+}
+.item:hover:not(:last-child) {
+  background-color: #fafafa;
+}
+
+.collapse:nth-of-type(1) {
+  transform: translate3d(0, 0px, 0) scale(1.025);
+}
+.collapse:nth-of-type(1) {
+  transform: translate3d(0, 0, 0);
+}
+.collapse:nth-of-type(2) {
+  transform: translate3d(0, -56px, 0) scale(1.05);
+}
+.collapse:nth-of-type(1) {
+  transform: translate3d(0, 0, 0);
+}
+.collapse:nth-of-type(3) {
+  transform: translate3d(0, -112px, 0) scale(1.075);
+}
+.collapse:nth-of-type(1) {
+  transform: translate3d(0, 0, 0);
+}
+.collapse:nth-of-type(4) {
+  transform: translate3d(0, -168px, 0) scale(1.1);
+}
+.collapse:nth-of-type(1) {
+  transform: translate3d(0, 0, 0);
+}
+.collapse:hover:last-child {
+  transform-origin: 50% 100%;
+  transform: translate3d(0, -174px, 0) rotateX(30deg) scale(1.1);
+}

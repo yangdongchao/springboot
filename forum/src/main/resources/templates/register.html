@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="Bootstrap Admin App + jQuery"/>
+    <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin"/>
+    <title>SHUE | 让考试更简单</title>
+    <link rel="icon" href="/img/ourIcon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/vendor/simple-line-icons/css/simple-line-icons.css}">
+    <link rel="stylesheet" th:href="@{/media/css/bootstrap.css}" id="bscss">
+    <link rel="stylesheet" th:href="@{/media/css/app.css}" id="maincss1">
+    <link rel="stylesheet" th:href="@{/media/css/theme-i.css}" id="maincss">
+</head>
+<body>
+<div class="wrapper">
+    <div class="block-center mt-xl wd-xl">
+        <div class="panel panel-dark panel-flat">
+            <div class="panel-heading text-center">
+                <a href="/index">
+                    <img src="/img/shue.png" alt="Image" class="block-center img-rounded"/>
+                </a>
+            </div>
+            <div class="panel-body" id="loginPage">
+                <p class="text-center pv">请注册</p>
+                <form id="form" data-parsley-validate="true" onsubmit="return false">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="username" placeholder="用户名" class="form-control" data-parsley-error-message="请输入用户名" required="required" />
+                        <span class="fa fa-user form-control-feedback text-muted"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="text" id="email" placeholder="邮箱" class="form-control" data-parsley-error-message="请输入邮箱" required="required" />
+                        <span class="fa fa-envelope form-control-feedback text-muted"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="password" id="password" placeholder="密码"  class="form-control" data-parsley-error-message="请输入密码" required="required" />
+                        <span class="fa fa-lock form-control-feedback text-muted"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="password" id="rpassword" placeholder="确认密码"  class="form-control" data-parsley-error-message="请确认密码" required="required" />
+                        <span class="fa  fa-unlock-alt form-control-feedback text-muted"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txt_ide2" placeholder="年级"  list="ide2" class="form-control" data-parsley-error-message="请选择你的年级" required="required" />
+                        <datalist id="ide2">
+                            <option value="大一" />
+                            <option value="大二" />
+                            <option value="大三" />
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txt_ide1" list="ide1" placeholder="学院" class="form-control" data-parsley-error-message="请选择你的学院" required="required"/>
+                        <datalist id="ide1">
+                            <optgroup label="北京">
+                                <option value="机电工程与自动化学院" />
+                                <option value="计算机工程与科学学院" />
+                                <option value="通信与信息工程学院（翔英学院）" />
+                                <option value="环境与化学工程学院" />
+                                <option value="材料科学与工程学院" />
+                                <option value="中欧工程技术学院" />
+                                <option value="土木工程系" />
+                                <option value="材料基因组工程研究院" />
+                                <option value="经济学院" />
+                                <option value="管理学院" />
+                                <option value="图书情报档案系" />
+                                <option value="悉尼工商学院" />
+                                <option value="管理教育研究院（MBA中心）" />
+                                <option value="理学院" />
+                                <option value="生命科学学院" />
+                            </optgroup>
+                        </datalist>
+                    </div>
+
+                    <div id="errorMsg3" class="alert alert-danger text-center" style="display:none;"></div>
+                    <button id="reg" class="btn btn-block btn-primary mt-lg">注册</button>
+                    <p></p>
+                    <a href="/login" class="btn btn-default center-block" style="width:100%">已有账号 登录</a>
+                </form>
+            </div>
+        </div>
+        <div class="p-lg text-center">
+            <span>&copy;</span>
+            <span>2019</span>
+            <span>-</span>
+            <span>2020</span>
+            <br/>
+            <span>ydc Liuwen Li  Johnson</span>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+
+<script>
+    var uu= document.getElementById('username');
+    var pp= document.getElementById('password');
+    var pp2= document.getElementById('rpassword');
+    var email = document.getElementById("email");
+    var obtn = document.getElementById('reg');
+
+    var grade = document.getElementById('txt_ide2');
+    var academy =document.getElementById('txt_ide1');
+
+
+    //alert(grade);
+    //alert(academy);
+    function isnull(val_1,val_2,val_3,val_4) {
+        console.log('sad');
+        //var str = val_1.replace(/(^\s*)|(\s*$)/g, '');//去除空格;
+        str = val_1;
+        if (str === '' || str === undefined || str == null){
+            console.log("1");
+            return false;
+        }
+        str3=val_4;
+        if (str3 === '' || str3 === undefined || str3 == null) {
+            console.log('4');
+            return false;
+        }
+        //var str1 = val_2.replace(/(^\s*)|(\s*$)/g, '');
+        str1=val_2;
+        if (str1 === '' || str1 === undefined || str1 == null) {
+            console.log('2');
+            return false;
+        }
+        //var str2 = val_3.replace(/(^\s*)|(\s*$)/g, '');
+        str2=val_3;
+        if (str2 === '' || str2 === undefined || str2 == null || str1!=str2) {
+            console.log('3');
+            alert("两次密码不相同，请检查");
+            return false;
+        }
+        return true;
+    }
+    obtn.onclick = function () {
+        //alert(grade);
+        //alert(academy);
+
+        var bl =isnull(uu.value,pp.value,pp2.value,email.value);
+        if(bl===true){
+            $.ajax({
+                url : '/register',
+                data : {'userName':uu.value,'email':email.value,'password':pp.value,'grade':grade.value,'academy':academy.value},
+                async:  false,  //发送同步请求，其他事件必须等待
+                type : 'POST',
+                dataType : "json",
+                error : function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log(XMLHttpRequest);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                },
+                success: function (response) {
+                    if(response.rspCode==="000000"){
+                        window.open("/login");
+                    }
+                    else if(response.rspCode==="000102"){
+                        $("#errorMsg3").html("该用户名已存在");
+                        $("#errorMsg3").show();
+                        //alert("该用户名已存在")
+                    }
+                    else if(response.rspCode==="000103"){
+                        //alert("该邮箱已被注册")
+                        $("#errorMsg3").html("该邮箱已被注册");
+                        $("#errorMsg3").show();
+                    }
+                    else{
+                        //alert("发生异常，请稍后重试")
+                        $("#errorMsg3").html("发生异常，请稍后重试");
+                        $("#errorMsg3").show();
+                    }
+                }
+            })
+        }
+    }
+
+
+</script>
+
+
+
+
+</body>
+
+
+</html>

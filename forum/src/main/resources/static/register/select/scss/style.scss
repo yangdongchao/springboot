@@ -1,0 +1,73 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro);
+
+// colors
+$shadow: hsla(0, 0%, 0%, .2);
+$item-background: white;
+$bgcolor: hsl(0, 79%, 60%);
+
+// settings
+$width: 300px;
+$height: 50px;
+
+body {
+  background-color: $bgcolor;
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+}
+
+.dropdown {
+  width: $width+30px;
+  height: $height;
+  margin: 40px auto;
+  perspective: 1000px;
+  box-shadow: 0 5px 10px $shadow;
+}
+
+.dropped {
+  height: $height * 4;
+}
+
+.item {
+  width: $width;
+  height: $height;
+  line-height: $height;
+  box-shadow: 0 2px 5px $shadow;
+  margin: 0 0;
+  padding: 0 20px;
+  background-color: $item-background;
+  transition: transform .15s linear;
+  cursor: pointer;
+  user-select: none;
+  
+  &:last-child {
+    transform: translate3d(0, -($height * 3), 0)
+  }
+  &:not(:last-child) {
+    transform: translate3d(0, $height, 0);
+  }
+  &:hover {
+    &:not(:last-child) {
+      background-color: darken(white, 2%);
+    }
+  }
+}
+
+.collapse {
+  @for $i from 1 through 4 {
+    &:nth-of-type(#{$i}) {
+      transform: translate3d(0, -(($height+6px) * ($i - 1)), 0)
+                 scale(1 + ($i/40))
+    }
+    &:nth-of-type(1) {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  
+  &:hover {
+    &:last-child {
+      transform-origin: 50% 100%;
+      transform: translate3d(0, -(($height+8px) * 3), 0) 
+                 rotateX(30deg)
+                 scale(1.10);
+    }
+  }
+}

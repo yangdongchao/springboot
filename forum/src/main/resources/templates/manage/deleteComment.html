@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="Bootstrap Admin App + jQuery"/>
+    <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin"/>
+    <title>SHUE | 让考试更简单</title>
+    <link rel="icon" href="/img/ourIcon.ico" type="image/x-icon" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/img/ourIcon.ico" type="image/x-icon" />
+    <title >SHUE | 让考试更简单</title>
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome/css/font-awesome.min.css}" />
+    <link rel="stylesheet" th:href="@{/vendor/simple-line-icons/css/simple-line-icons.css}"/>
+    <link rel="stylesheet" th:href="@{/vendor/animate.css/animate.min.css}"/>
+    <link rel="stylesheet" th:href="@{/vendor/toastr/toastr.min.css}"/>
+    <link rel="stylesheet" th:href="@{/media/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/media/css/app.css}" />
+    <link rel="stylesheet" th:href="@{/media/css/theme-i.css}" />
+    <style>
+        input[type="checkbox"]{width:20px;height:20px;display: inline-block;text-align: center;vertical-align: middle; line-height: 18px;position: relative;}
+        input[type="checkbox"]::before{content: "";position: absolute;top: 0;left: 0;background: #fff;width: 100%;height: 100%;border: 1px solid #d9d9d9}
+        input[type="checkbox"]:checked::before{content: "\2713";background-color:
+                rgb(93, 163, 184);position: absolute;top: 0;left: 0;width:100%;border: 1px solid #fff;color:#fff;font-size: 12px;font-weight: bold;}
+        .click_for_more{
+            margin:0 auto;
+            width:50%;
+        }
+    </style>
+    <script src="jquery/jquery.min.js"></script>
+</head>
+<body>
+
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <!--div class="panel-title">控制台</div-->
+                    <div class="col-md-12">
+                        <h2>评论监控</h2>
+                        <hr>
+                        <h4 th:text="'文章标题：'+${topic.getTopicTitle()}"></h4>
+                        <br><br>
+                    </div>
+                </div>
+
+
+                <div class="panel-body">
+                    <!-- Table -->
+                    <li class="media bb p" th:each="post: ${posts}" th:id="'comment'+${post.getPostId()}">
+                        <div >
+                            <small class="pull-right text-muted" th:text="${post.getCreateTime()}">2019-02-24T05:04:22</small>
+                            <div class="media-body">
+                            <span class="media-heading">
+                                <p class="m0">
+                                    <big th:text="${post.getUserName()}">xiuwenli</big>
+                                </p>
+                                <p class="m0 text-muted" th:text="${post.getPostText()}">what the fuck</p>
+                            </span>
+                            </div>
+                            <div align="right">
+                                <a th:onclick="'managerDeleteComment('+${post.getPostId()}+','+${post.getTopicId()}+')'">
+                                    <button class="btn btn-danger"  name="ban">删除</button>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+
+                </div>
+
+
+                <br>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+<script src="http:////cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<!--<script th:src="@{https://code.jquery.com/jquery-3.3.1.min.js}"></script>-->
+<script th:src="@{/vendor/jquery.form/jquery.form.min.js}"></script>
+<!--<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js}"></script>-->
+<script th:src="@{/vendor/modernizr/modernizr.custom.js}" ></script>
+<script th:src="@{/vendor/jQuery-Storage-API/jquery.storageapi.js}" ></script>
+<script th:src="@{/media/js/app.js}" ></script>
+<script th:src="@{/vendor/parsleyjs/dist/parsley.min.js}"></script>
+<script th:src="@{/vendor/toastr/toastr.min.js}"></script>
+<script th:src="@{/js/comm.js}" ></script>
+<script th:src="@{/js/layout.js}" ></script>
+<script th:src="@{/js/collect.js}" ></script>
+<script th:src="@{/js/letter.js}" ></script>
+<script th:src="@{/js/follow.js}"></script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content="SHU | 让考试更简单"/>
+    <meta name="author" content=""/>
+    <!--<meta http-equiv="refresh" content="1000;url=/lookAround" /> 自动跳转-->
+
+    <title>SHUE | 让考试更简单</title>
+    <link rel="icon" href="/img/ourIcon.ico" type="image/x-icon" />
+    <!-- Bootstrap Core CSS -->
+    <link href="index/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Theme CSS -->
+    <link href="index/css/freelancer.min.css" rel="stylesheet" />
+
+    <!-- Custom Fonts -->
+    <link href="index/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        #portfolio .portfolio-item .portfolio-link .caption .caption-content{ top:36%;}
+        #portfolio .portfolio-item .portfolio-link .caption .caption-content p{ font-size:16px; line-height:24px; margin:24px 16px 0;}
+        #portfolio .portfolio-item .portfolio-link{ height: 260px; overflow:hidden; }
+        #portfolio .portfolio-item:nth-child(1) .portfolio-link{ background: #ba4c63;}
+        #portfolio .portfolio-item:nth-child(2) .portfolio-link{ background: #1fa4b6;}
+        #portfolio .portfolio-item:nth-child(3) .portfolio-link{ background: #f8a3a3;}
+        #portfolio .portfolio-item:nth-child(4) .portfolio-link{ background: #1d83c1;}
+        #portfolio .portfolio-item:nth-child(5) .portfolio-link{ background: #18bc9c;}
+        #portfolio .portfolio-item:nth-child(6) .portfolio-link{ background: #ccb2a3;}
+        #portfolio .portfolio-item .portfolio-link .img-responsive{ width: 180px; height: 180px; display: block; border-radius: 50%; margin: 40px auto; }
+    </style>
+
+
+</head>
+
+<body id="page-top" class="index">
+
+<!-- Navigation -->
+<nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="#page-top">SHUE</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a th:if="${session.USER_CONTEXT!=null}" href="/home"  >home</a>
+                    <a th:if="${session.USER_CONTEXT==null}" href="#">登陆即可享有更多服务</a>
+                </li>
+                <li>
+                    <a href="/login" th:unless="${session.USER_CONTEXT != null}">登录</a>
+                    <a href="/" th:if="${session.USER_CONTEXT != null}" th:text="${session.USER_CONTEXT.userName}" class="userName"></a>
+                </li>
+                <li class="hidden">
+                    <a href="#page-top"></a>
+                </li>
+
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+
+<!-- Header -->
+<header style="background-color: purple">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <img class="img-responsive" src="/img/code.jpg" alt="" />
+                <div class="intro-text">
+                    <span class="name">SHUE</span>
+                    <hr class="star-light"/>
+                    <span class="skills">随时随地 - 方便快捷 - 简化复习</span><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<!-- Portfolio Grid Section -->
+<section id="portfolio">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>shuer</h2>
+                <hr class="star-primary"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 portfolio-item">
+                <a href="/look/1" class="portfolio-link" data-toggle="modal">
+                    <div class="caption">
+                        <div class="caption-content">
+                            <i class="fa fa-search-plus fa-3x"></i>
+                            <p>我是一个风骚的程序员</p>
+                        </div>
+                    </div>
+                    <img src="index/img/portfolio/cabin.png" class="img-responsive" alt="" />
+                </a>
+            </div>
+            <div class="col-sm-4 portfolio-item">
+                <a href="/look/2" class="portfolio-link" data-toggle="modal">
+                    <div class="caption">
+                        <div class="caption-content">
+                            <i class="fa fa-search-plus fa-3x"></i>
+                            <p>我是一个通信大佬</p>
+                        </div>
+                    </div>
+                    <img src="index/img/portfolio/cake.png" class="img-responsive" alt="" />
+                </a>
+            </div>
+            <div class="col-sm-4 portfolio-item">
+                <a href="/look/3" class="portfolio-link" data-toggle="modal">
+                    <div class="caption">
+                        <div class="caption-content">
+                            <i class="fa fa-search-plus fa-3x"></i>
+                            <p>我是一个有风格的建筑师</p>
+                        </div>
+                    </div>
+                    <img src="index/img/portfolio/circus.png" class="img-responsive" alt="" />
+                </a>
+            </div>
+            <div class="col-sm-4 portfolio-item">
+                <a href="/look/4" class="portfolio-link" data-toggle="modal">
+                    <div class="caption">
+                        <div class="caption-content">
+                            <i class="fa fa-search-plus fa-3x"></i>
+                            <p>我是一个数学系的小伙伴</p>
+                        </div>
+                    </div>
+                    <img src="index/img/portfolio/game.png" class="img-responsive" alt="" />
+                </a>
+            </div>
+            <div class="col-sm-4 portfolio-item">
+                <a href="/look/5" class="portfolio-link" data-toggle="modal">
+                    <div class="caption">
+                        <div class="caption-content">
+                            <i class="fa fa-search-plus fa-3x"></i>
+                            <p>我是一个物理系的小伙伴</p>
+                        </div>
+                    </div>
+                    <img src="index/img/portfolio/safe.png" class="img-responsive" alt=""/>
+                </a>
+            </div>
+            <div class="col-sm-4 portfolio-item">
+                <a href="/lookAll" class="portfolio-link" data-toggle="modal">
+                    <div class="caption">
+                        <div class="caption-content">
+                            <i class="fa fa-search-plus fa-3x"></i>
+                            <p>我全都要....</p>
+                        </div>
+                    </div>
+                    <img src="index/img/portfolio/submarine.png" class="img-responsive" alt="" />
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- About Section -->
+<section class="success" id="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>关于我们</h2>
+                <hr class="star-light"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-2">
+                <p>我们做了一个可以帮助SHUer简化期末复习的网站
+                    <br/>你可以在这里看到大佬们的复习笔记
+                    <br/>你可以在这里看到不同老师划出的重点
+                    <br/>作为大佬的你，当然需要在这里留下你的知识了!
+                </p>
+            </div>
+            <div class="col-lg-4">
+                <p>表面上我们仅仅只是做一个课程项目，其实我们真的需要这样一个网站（流下了绩点低的泪水）
+                    <br/>自由、分享、开源、取得高绩点是我们的主题
+                    <br/>当你对考试重点一无所知的时候，这里可以给予你爱的怀抱，当你满腹经纶，才华横溢的时候，这里是你施展拳脚，造福同学的港湾！
+                    <br/>那就让SHUE陪伴你的考试周吧！
+                </p>
+            </div>
+            <div class="col-lg-8 col-lg-offset-2 text-center">
+                <a href="https://github.com/yangdongchao/forum" class="btn btn-lg btn-outline">
+                    <i class="fa fa-download"></i> GITHUB--关注我们
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--Contact Section -->
+<section id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>联系我们</h2>
+                <hr class="star-primary"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <br/><br/><br/>
+
+                <p>  SHUE是一个使用 Spring Boot 构建的网站，可以让同学们了解到更多的考试信息。在这里，同学们不仅可以成为信息的受益者，也可以成为知识的传播者。
+                     没错，请让我叫你一声老师。
+                </p>
+                <p>
+                    <strong>核心功能点：</strong>
+                    <br/>  - 浏览帖子
+                    <br/>  - 使用ueditor编辑精美文章
+                    <br/>  - 可以点赞，评论
+                    <br/>  - 注册、登录、个人账户
+                    <br/>  - 设置个人专属头像
+                    <br/>  - 支持邮箱找回密码
+                    <br/>  - 其它…
+                </p>
+                <p>
+                    你有两种方式可以找到我们：<br/><br/>
+                    1、发邮件给我
+                    <a href="mailto:15087581161@163.com">
+                        15087581161@163.com
+                    </a>
+                    <br/>
+                    2、github上面
+                    <a target="_blank" href="https://github.com/yangdongchao/forum">
+                        关注我们的项目
+                    </a>
+                    <br/>
+                    3、如果你觉得还有完善的地方，<a href="/feedback">欢迎给我们提建议！</a>
+                </p>
+                <p>
+                    欢迎各位大佬加入我们，一起完善这个网站。<br>
+                    如果你是一个刚入门的小白，但是对这个项目很感兴趣。也欢迎加入我们，项目的代码都有
+                    注释，我们还会写相关的知识博客，供各位学习。
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center">
+    <div class="footer-above">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col col-md-4">
+                    <h3>位置</h3>
+                    <p>SHU</p>
+                </div>
+                <div class="footer-col col-md-4">
+                    <h3>学习如何构建这个网站</h3>
+                    <a href="https://blog.csdn.net/qq_40774175/column/info/32808" target="_blank">点击查看博客</a>
+                    <ul class="list-inline">
+                        <li>
+                            <img src="contactMe/mee.png" style="width: 60%;" />
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-col col-md-4">
+                    <h3>关于网站</h3>
+                    <p>由ydc,Johnson,Xiuwen Li共同构建</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-below">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    Copyright &copy; SHUE 2019-2020
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+<div class="scroll-top page-scroll hidden-sm hidden-xs hidden-lg hidden-md">
+    <a class="btn btn-primary" href="#page-top">
+        <i class="fa fa-chevron-up"></i>
+    </a>
+</div>
+
+<!-- jQuery -->
+<script src="index/vendor/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="index/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Plugin JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+<!-- Contact Form JavaScript -->
+<script src="index/js/jqBootstrapValidation.js"></script>
+<script src="index/js/contact_me.js"></script>
+
+<!-- Theme JavaScript -->
+<script src="index/js/freelancer.min.js"></script>
+<div style="display:none">
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260466344'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1260466344' type='text/javascript'%3E%3C/script%3E"));</script>
+</div>
+</body>
+
+</html>
