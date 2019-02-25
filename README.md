@@ -20,7 +20,7 @@
 - springboot 基础
 
 ###### 数据库
-- myslq
+- mysql
 ###### 自然语言处理
 - 卷积神经网络
 - python基础
