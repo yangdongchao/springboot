@@ -18,8 +18,9 @@
 - maven
 - tomcat
 - springboot 基础
-######数据库
-- myslq
+
+###### 数据库
+- mysql
 ###### 自然语言处理
 - 卷积神经网络
 - python基础
