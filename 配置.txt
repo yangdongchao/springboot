@@ -1,0 +1,6 @@
+1.项目使用intellij IDEA打开
+2. 点击maven install 即可配置相关文件
+3. 更改数据库相关信息
+4. 点击 maven run即可运行项目
+5. 浏览器输入 localhost:443
+
